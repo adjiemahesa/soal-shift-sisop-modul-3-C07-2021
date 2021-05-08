@@ -1,61 +1,45 @@
 #include<stdio.h>
 #include<string.h>
-#include<pthread.h>
 #include<stdlib.h>
+#include<pthread.h>
 #include<unistd.h>
 #include<sys/types.h>
+#include<sys/stat.h>
 #include<sys/wait.h>
+#include<dirent.h>
 
-pthread_t tid[3]; //inisialisasi array untuk menampung thread dalam kasus ini ada 2 thread
+pthread_t tid[5000];
+char *curDir;
 
-int length=5; //inisialisasi jumlah untuk looping
-void* playandcount(void *arg)
-{
-	char *argv1[] = {"clear", NULL};
-	char *argv2[] = {"mkdir", "-p", "modul3/soal3", NULL};
-	unsigned long i=0;
-	pthread_t id=pthread_self();
-	int iter;
-	if(pthread_equal(id,tid[0])) //thread untuk menjalankan counter
-	{
-		for(iter=0;iter<6;iter++)
-		{
-			printf("%d\n",iter);
-			fflush(stdout);
-			sleep(1);
-		}
-	}
-	else if(pthread_equal(id,tid[1])) // thread menampilkan gambar
-	{
-		execv("/bin/mkdir", argv2);
-	}
-	else if(pthread_equal(id,tid[2])) // thread menutup gambar
-	{
-		execv("/usr/bin/pkill", argv2);
-	}
+void moveFileUtil(char source[], char dest[]);
+char* searchfileName(char str[]);
+char* searchExtension(char str[]);
+void* move(void *arg);
+void* moveChoosen(void *arg);
 
-	return NULL;
+char* searchExtension(char str[]){
+    char* pch = searchfileName(str);
+    char* result = strchr(pch, '.');
+    if(result == NULL)
+	{
+		return NULL;
+	}
+    else return (result+1);
 }
 
-int main(void)
-{
-	int i=0;
-	int err;
-	while(i<2) // loop sejumlah thread
-	{
-		err=pthread_create(&(tid[i]),NULL,&playandcount,NULL); //membuat thread
-		if(err!=0) //cek error
-		{
-			printf("\n can't create thread : [%s]",strerror(err));
-		}
-		else
-		{
-			printf("\n create thread success\n");
-		}
-		i++;
-	}
-	pthread_join(tid[0],NULL);
-	pthread_join(tid[1],NULL);
-	exit(0);
-	return 0;
+int main(int argc, char **argv){
+	char array[1000];
+    curDir = getcwd(array, 1000);
+    int i;
+
+    if(strcmp(argv[1], "-f") == 0){
+        while(argv[i] != NULL){
+            pthread_create(&(tid[i-2]), NULL, &move, (void *)argv[i]);
+            i++;
+        }
+        for(j = 0; j < (i-1); j++){
+            pthread_join(tid[j], NULL);
+        }
+    }
+	
 }
