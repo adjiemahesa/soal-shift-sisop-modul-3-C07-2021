@@ -21,26 +21,18 @@ void* move(void *arg){
     pthread_t id = pthread_self();
     char *folderExtension;
 
-    folderExtension = getExt((char *)arg);
+    folderExtension = searchExtension((char *)arg);
 
     if(folderExtension == NULL)
 	{
-        strcpy(folderDest, "Unknown");
+        strcpy(folderDest, NULL);
     }
     else{
         strcpy(folderDest, folderExtension);
-        int i;
-        for(i = 0; i < strlen(folderDest); i++){
-            if(folderDest[i] > 64 && folderDest[i] < 91)
-                folderDest[i] += 32;
+		
         }
     }
-    
-    if(mkdir(folderDest, 0777) == -1);
-
-    char pathDestination[5000];
-    snprintf(pathDestination, 5000, "%s/%s/%s", curDir, folderDest, getFilename((char *)arg));
-    moveFileUtil((char *)arg, pathDestination);
+    if(mkdir(folderDest, );
 }
 
 char* searchExtension(char str[]){
@@ -50,19 +42,20 @@ char* searchExtension(char str[]){
 	{
 		return NULL;
 	}
-    else return (result+1);
+    else return (result);
 }
 
  int main(void)
 {
-	int i=0;
+	int i=2;
+	int j;
 	int err;
 	char array[1000];
     curDir = getcwd(array, 1000);
 	while(i<3) // loop sejumlah thread
 	{
-		err=pthread_create(&(tid[i]),NULL,&move,NULL); //membuat thread
-		if(err!=0) //cek error
+		ierr=pthread_create(&(tid[i]),NULL,&move,NULL); 
+		if(err!=0) 
 		{
 			printf("\n can't create thread : [%s]",strerror(err));
 		}
