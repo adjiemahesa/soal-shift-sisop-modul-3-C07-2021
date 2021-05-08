@@ -66,8 +66,10 @@ void perkalian_matrix(int matriks4x3[10][10],
 
 // fungsi untuk menampilkan hasil
 void tampilkan_hasil(int hasil[10][10], int baris, int kolom) {
-   for (i = 0; i < baris; i++) {
-      for (j = 0; j < kolom; j++) {
+   for (i = 0; i < baris; i++) 
+   {
+      for (j = 0; j < kolom; j++) 
+      {
          /*hasil*/ printf("%d  ", hasil[i][j]);
          if (j == kolom - 1)
             printf("\n");
@@ -75,7 +77,8 @@ void tampilkan_hasil(int hasil[10][10], int baris, int kolom) {
    }
 }
 
-int main() {
+int main() 
+{
    int matriks4x3[10][10]; 
    int matriks3x6[10][10]; 
    int hasil[10][10]; 
