@@ -336,6 +336,7 @@ void *moveFile(void *arg)
 }
 ```
 Pada fungsi ini akan dilakukan pemeriksaan terhadap file dengan mengambil nama ekstensi tiap file yang diperiksa dan digunakan untuk membuat folder-folder sesuai nama ekstensinya. Hasil dari soal ini sebagai berikut:
+
 ![image](https://user-images.githubusercontent.com/55140514/119259883-7e4b1500-bbfa-11eb-8cd4-a83d5c2a4be5.png)
 ![image](https://user-images.githubusercontent.com/55140514/119259898-8c993100-bbfa-11eb-97dd-693bd8c3c0b3.png)
 
@@ -409,6 +410,7 @@ void listFiles(char *oriPath)
 Fungsi ini bekerja dengan melakukan pengecekan apakah file yang sedang di periksa benar-benar ada dengan melakukan ``strcmp`` pada list file untuk memeriksa apakah ada "." atau ".." karena jika ada maka menandakan bahwa bukan file. Lalu, akan dilakukann pemindahan file  file yang terdapat thread pada `` err = pthread_create(&(threads[threadCount - 2]), NULL, &moveFile, (void *)path);``. Setelah itu baru akan masuk ke fungsi *moveFile* seperti Soal 3A.
 
 Hasil seperti berikut:
+
 ![image](https://user-images.githubusercontent.com/55140514/119260535-67f28880-bbfd-11eb-9064-288270566b79.png)
 ![image](https://user-images.githubusercontent.com/55140514/119260542-7476e100-bbfd-11eb-893d-3e01b157c4cb.png)
 
@@ -475,6 +477,7 @@ void listFiles(char *oriPath)
 }
 ```
 Lalu, seperti pada soal 3B, dilakukan kembali fungsi *moveFile* untuk memindahkan file nya. Hasil dari program adalah sebagai berikut
+
 ![image](https://user-images.githubusercontent.com/55140514/119263829-d427b900-bc0a-11eb-8d93-e4219b714ab9.png)
 ![image](https://user-images.githubusercontent.com/55140514/119263834-dee24e00-bc0a-11eb-9d5f-ddaf71845de9.png)
 
@@ -565,6 +568,7 @@ void newFilePath(char source[], char dest[])
 ```
 Fungsi ini digunakan untuk memindahkan semua file ke foldernya masing-masing agar mengertahui file harus kemana. Hasil sebagai berikut
 
+![image](https://user-images.githubusercontent.com/55140514/119264515-c0318680-bc0d-11eb-92fb-7512fba0d78d.png)
 
 ## 3E
 Pada soal ini diminta agar setiap file yang dikategorikan dioperasikan oleh 1 thread agar jalan secara paralel. Program sudah menerapkan 1 Thread untuk tiap pengkategorian file karena file dipindahkan secara satu per satu.
