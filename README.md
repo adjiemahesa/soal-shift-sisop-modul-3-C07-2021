@@ -413,5 +413,70 @@ Hasil seperti berikut:
 ![image](https://user-images.githubusercontent.com/55140514/119260542-7476e100-bbfd-11eb-893d-3e01b157c4cb.png)
 
 ## 3C
+Soal ini meminta untuk melakukan sama seperti pada soal 3B, tetapi perbedaannya disini hanya akan melakukan pengkategorian seluruh file yang berada pada working directory program C. Sesuai permintaan soal, program akan menjalankan operasi seperti ini ketika menerima perintah atau argumen ``*``. Cara penyelesaian soal ini hampir sama dengan yang ada pada soal 3B. Langkah pertama yang dilakukan adalah membuat program menerima argumen tersebut seperti berikut
+```
+ else if (strcmp(argv[1], "*") == 0){
+        listFiles(".");
+        if (errCheck == 0){
+            printf("Direktori sukses disimpan!\n");
+        }
+        else{
+            printf("Yah, gagal disimpan:(\n");
+        }
+    }
+```
+Lalu, karena diminta untuk melakukan pemeriksaan dengan cara rekursif, maka akan digunakan lagi funsgi *listFiles* seperti pada soal 3B.
+```
+void listFiles(char *oriPath)
+{
+    char path[1000], pathThread[1000];
+    struct dirent **namelist;
+    int i = 0;
+    int n = scandir(oriPath, &namelist, NULL, alphasort);;
+    if (n < 0)
+        return;
+    else
+    {
+        while (i < n)
+        {
+            if (strcmp(namelist[i]->d_name, ".") != 0 && strcmp(namelist[i]->d_name, "..") != 0)
+            {
+                strcpy(path, oriPath);
+                strcat(path, "/");
+                strcat(path, namelist[i]->d_name);
 
+                strcat(pathThread, "/");
+                strcat(pathThread, namelist[i]->d_name);
+
+                if (namelist[i]->d_type != DT_DIR)
+                {
+                    int err;
+                    err = pthread_create(&(threads[threadCount - 2]), NULL, &moveFile, (void *)path);
+
+                    if (err != 0){
+                        errCheck++;
+                        printf("File %d: Sad, gagal :(\n", threadCount - 1);
+                    }
+                    else
+                        printf("File %d : Berhasil Dikategorikan\n", threadCount - 1);
+                        threadCount++;
+
+                    for (int p = 0; p < (threadCount - 1); p++){
+                        pthread_join(threads[p], NULL);
+                    }
+                }
+                listFiles(path);
+            }
+            free(namelist[i]);
+            ++i;
+        }
+        free(namelist);
+    }
+}
+```
+Lalu, seperti pada soal 3B, dilakukan kembali fungsi *moveFile* untuk memindahkan file nya. Hasil dari program adalah sebagai berikut
+![image](https://user-images.githubusercontent.com/55140514/119263829-d427b900-bc0a-11eb-8d93-e4219b714ab9.png)
+![image](https://user-images.githubusercontent.com/55140514/119263834-dee24e00-bc0a-11eb-9d5f-ddaf71845de9.png)
+
+## 3D
 
