@@ -7,7 +7,7 @@ untuk soal 2 A kami diminta untuk membuat program untuk menghitung perkalian mat
 
 __penyelesaian__
 
-``
+```
 printf("Input matriks A (4x3) :\n");
 	for (i = 0; i < 4; i++) {
     	for (j = 0; j < 3; j++) {
@@ -40,12 +40,12 @@ printf("Input matriks A (4x3) :\n");
   	}
 
 }
-``
+```
 
 bagian diatas adalah fungsi untuk menginput elemen-elemen pada matriks 4x3 dan matriks 3x6
 
 
-``
+```
 void* multiplymatrices(void* arg){
   
   int x;
@@ -58,20 +58,20 @@ void* multiplymatrices(void* arg){
     }
   }
 }
-``
+```
 bagian diatas adalah fungsi untuk menghitung perkalian 2 matriks tersebut dan memasukkan kedalam array hasil
 
-``
+```
 for(int a=0; a<4; a++){
     pthread_create(&t[a], NULL, &multiplymatrices, NULL);
   }
   for (int a=0; a<4; a++){
     pthread_join(t[a], NULL);
   }
-``
+```
 bagian di atas pada fungsi main adalah thread yang dibuat menggunakan loop untuk melakukan fungsi multiplymatrices untuk mengalikan matrks
 kemudian melakukan print 
-``
+```
 printf("\nHasil : \n");
 for(int b=0; b<i; b++){
   for(int c=0; c<j ; c++){
@@ -79,7 +79,7 @@ for(int b=0; b<i; b++){
   }
   printf("\n");
 }
-``
+```
 bagian di bawah ini adalah shared memory yang digunakan karena hasil dari soal ini akan digunakan kembali di soal b
 ```
 key_t key = 1234;
