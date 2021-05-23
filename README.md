@@ -91,7 +91,175 @@ hasil perkalian dalam screenshot :
 
 
 ## 2b
+di soal 2b ini kami diminta untuk melakukan suatu operasi antara hasil matriks di soal sebelumnya dengan input matriks baru 
+dengan ketentuan operasi sebagai berikut
+![image](https://user-images.githubusercontent.com/81466736/119262120-4d6fdd80-bc04-11eb-9088-4cef020dcdb9.png)
 
+```
+void MatriksInput(){
+    printf("Input matriks 4x6 :\n");
+	for (int i = 0; i < 4; i++) {
+    	for (int j = 0; j < 6; j++) {
+		printf("input elemen B%d%d:\n", i+1, j+1);
+      		scanf("%d", & matriksInput[i][j]);
+   	 	}
+  	}
+	printf("\n");
+        for (int i = 0; i < 4; i++) {
+    	for (int j = 0; j < 6; j++) {
+		printf("%d\t",matriksInput[i][j]);
+   	 	}
+		printf("\n");}
+}
+```
+fungsi diatas adalah untuk melakukan input pada matriks yang baru
+
+```
+unsigned long long factorial(int n) 
+{ 
+	if(n==0)return 1;
+	else
+		return n*factorial(n-1);
+}
+```
+fungsi diatas adalah untuk melakukan perhitungan faktorial
+
+diawal program saya membuat stuct untuk menyimpan dan untuk mengambil data dari hasil operasi matriks
+```
+typedef struct data {
+	int matriksA;
+    int matriksB;
+	int x,y;
+}data;
+```
+
+```
+void *operasi_soal(void* arg)
+{
+	data* d = (data*) arg;
+	int a = d->matriksA;
+	
+	int b = d->matriksB;
+	int x = d->x;
+	int y = d->y;
+	
+	if(a==0 || b==0){
+		matriksfaktorial[x][y] = 0;}
+	else if (a>=b){
+		int temp = a-b;
+		matriksfaktorial[x][y] = factorial(a)/factorial(temp);}
+	else if(b>a){
+		matriksfaktorial[x][y] = factorial(a);}
+}
+```
+fungsi diatas adalah untuk melakukan operasi dengan ketentua di soal
+
+```
+for(int i= 0;i<4;i++)
+	{
+        for(int j=0;j<6;j++){
+	    data *index = (data *)malloc(sizeof(data));
+            index->matriksA = matriks[i][j];
+            index->matriksB = matriksInput[i][j];
+            index->x = i;
+            index->y = j;
+			pthread_create(&tid[i][j],NULL, &operasi_soal, (void*)index);
+			sleep(1);
+        }
+		
+	}
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 6; j++) {
+			pthread_join(tid[i][j], NULL);
+		}
+	}
+```
+pada bagian loop diatas mengambil data-data dari struct yang telah dibuat sebelumnya kemudian membuat thread untuk melakukan fungsi operasi_soal lalu melakukan join thread
+dengan shared memory digunakan untuk mengambil hasil dari soal 2a 
+
+hasil operasi di screenshot :
+![2b](https://user-images.githubusercontent.com/81466736/119262674-3d58fd80-bc06-11eb-87b0-bd31c0d4a4e5.JPG)
+
+
+## soal 2C
+disoal ini kami diminta untuk membuat program agar menjalakan command "“ps aux | sort -nrk 3,3 | head -5”" untuk melihat 5 proses teratas apa saja yang memakan resource komputernya 
+```
+void exec1() {
+  dup2(pipe1[1], 1);
+  close(pipe1[0]);
+  close(pipe1[1]);
+  execlp("ps", "ps", "aux", NULL);
+  perror("bad exec ps");
+  _exit(1);
+}
+
+void exec2() {
+  dup2(pipe1[0], 0);
+  dup2(pipe2[1], 1);
+  close(pipe1[0]);
+  close(pipe1[1]);
+  close(pipe2[0]);
+  close(pipe2[1]);
+  execlp("sort", "sort", "-nrk", "3.3", NULL);
+  perror("bad exec grep root");
+  _exit(1);
+}
+
+void exec3() {
+  dup2(pipe2[0], 0);
+  close(pipe2[0]);
+  close(pipe2[1]);
+  execlp("head", "head", "-5", NULL);
+  perror("bad exec grep sbin");
+  _exit(1);
+}
+```
+membuat 3 fungsi exec1, exec2, exec3 yang berisikan fungsi dup() untuk pipe dan fungsi execlp yang berisikan pada masing masing fungsi "ps"dan "aux" untuk exec_1, "sort", "-nrk",dan "3.3" untuk fungsi exec_2, dan "head", "-5" untuk exec_5.
+
+pada fungsi main akan dibuat pipe yang menjalankan 3 fungsi untuk membuat command "ps aux | sort -nrk 3,3 | head -5" diatas dan melakukan fork
+```
+void main() {
+
+  if (pipe(pipe1) == -1) {
+    perror("bad pipe1");
+    exit(1);
+  }
+
+  if ((pid = fork()) == -1) {
+    perror("bad fork1");
+    exit(1);
+  } else if (pid == 0) {
+    exec1();
+  }
+  if (pipe(pipe2) == -1) {
+    perror("bad pipe2");
+    exit(1);
+  }
+
+  if ((pid = fork()) == -1) {
+    perror("bad fork2");
+    exit(1);
+  } else if (pid == 0) {
+    exec2();
+  }
+  close(pipe1[0]);
+  close(pipe1[1]);
+  if ((pid = fork()) == -1) {
+    perror("bad fork3");
+    exit(1);
+  } else if (pid == 0) {
+    exec3();
+  }
+  
+}
+```
+output di terminal :
+
+![2c](https://user-images.githubusercontent.com/81466736/119263098-df2d1a00-bc07-11eb-94ee-10a2fbe8ea3d.JPG)
+
+## kendala saat mengerjakan soal 2
+
+masih kurang memahami materi pipe sehingga kesulitan saat mengerjakan dan memahami soal 2c
 
 # Soal 3
 Soal ini meminta kami untuk melakukan pengkategorian sesuai ektensi file yang ada pada file-file yang diberikan. Pengkategorian akan dilakukan dengan memindahkan file-file tersebut ke folder-folder yang akan dibuat sesuai ekstensi nya. 
