@@ -1,5 +1,98 @@
 # soal-shift-modul-3-C07-2021
 
+# Soal 2
+
+## 2A
+untuk soal 2 A kami diminta untuk membuat program untuk menghitung perkalian matriks 4x3 dan 3x6
+
+__penyelesaian__
+
+``
+printf("Input matriks A (4x3) :\n");
+	for (i = 0; i < 4; i++) {
+    	for (j = 0; j < 3; j++) {
+		printf("input elemen A%d%d:\n", i+1, j+1);
+      		scanf("%d", &matriksA[i][j]);
+   	 	}
+  	}
+	printf("\n");
+        for (i = 0; i < 4; i++) {
+    	for (j = 0; j < 3; j++) {
+		printf("%d\t",matriksA[i][j]);
+   	 	}
+		printf("\n");
+  	}
+
+    
+  printf("\nInput matriks B (3x6) :\n");
+	for (i = 0; i < 3; i++) {
+    	for (j = 0; j < 6; j++) {
+		printf("input elemen B%d%d:\n", i+1, j+1);
+      		scanf("%d", &matriksB[i][j]);
+   	 	}
+  	}
+	printf("\n");	
+	for (i = 0; i < 3; i++) {
+    	for (j = 0; j < 6; j++) {
+		printf("%d\t",matriksB[i][j]);
+   	 	}
+		printf("\n");
+  	}
+
+}
+``
+
+bagian diatas adalah fungsi untuk menginput elemen-elemen pada matriks 4x3 dan matriks 3x6
+
+
+``
+void* multiplymatrices(void* arg){
+  
+  int x;
+ 
+  x = baris++;
+
+  for(int y=0; y<6; y++){
+    for(int z=0; z<3; z++){
+      hasil[x][y] += matriksA[x][z] * matriksB[z][y];
+    }
+  }
+}
+``
+bagian diatas adalah fungsi untuk menghitung perkalian 2 matriks tersebut dan memasukkan kedalam array hasil
+
+``
+for(int a=0; a<4; a++){
+    pthread_create(&t[a], NULL, &multiplymatrices, NULL);
+  }
+  for (int a=0; a<4; a++){
+    pthread_join(t[a], NULL);
+  }
+``
+bagian di atas pada fungsi main adalah thread yang dibuat menggunakan loop untuk melakukan fungsi multiplymatrices untuk mengalikan matrks
+kemudian melakukan print 
+``
+printf("\nHasil : \n");
+for(int b=0; b<i; b++){
+  for(int c=0; c<j ; c++){
+    printf("%d\t", hasil[b][c]);
+  }
+  printf("\n");
+}
+``
+bagian di bawah ini adalah shared memory yang digunakan karena hasil dari soal ini akan digunakan kembali di soal b
+```
+key_t key = 1234;
+int shmid = shmget(key, sizeof(int)*i*j, IPC_CREAT | 0666);
+matriks =  shmat(shmid, NULL, 0);
+```
+hasil perkalian dalam screenshot :
+![2a](https://user-images.githubusercontent.com/81466736/119261849-7479df80-bc03-11eb-8a29-6dea7a58a15f.JPG)
+
+
+## 2b
+
+
 # Soal 3
 Soal ini meminta kami untuk melakukan pengkategorian sesuai ektensi file yang ada pada file-file yang diberikan. Pengkategorian akan dilakukan dengan memindahkan file-file tersebut ke folder-folder yang akan dibuat sesuai ekstensi nya. 
 
