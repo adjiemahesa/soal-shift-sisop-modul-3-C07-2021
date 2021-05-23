@@ -479,4 +479,92 @@ Lalu, seperti pada soal 3B, dilakukan kembali fungsi *moveFile* untuk memindahka
 ![image](https://user-images.githubusercontent.com/55140514/119263834-dee24e00-bc0a-11eb-9d5f-ddaf71845de9.png)
 
 ## 3D
+Pada soal ini diminta agar semua file harus berada di dalam folder. Lalu, karena ada kemungkinan file yang tidak mempunyai ekstensi, maka file tersebut akan masuk kedalam folder bernama "Unknown". Setelah itu ada kemungkinan terdapat juga file yang hidden, maka jika ada file tersebut akan pindah ke folder bernama "Hidden". Untuk itu, digunakan fungsi *moveFile*
+```
+void *moveFile(void *arg)
+{
+    char *fileName = (char *)arg;
+    char fileOriginal[1000], tempFile[1000];
+    strcpy(fileOriginal, fileName);
+    strcpy(tempFile, fileName);
 
+    char *ext = get_file_extension(fileName);
+    char *noPathName = noPathFolderName(tempFile);
+
+    char nameFolder[120];
+
+    if (noPathName[0] == '.'){
+        sprintf(nameFolder, "Hidden");
+    }
+    else if (ext == NULL){
+        sprintf(nameFolder, "Unknown");
+    }
+    else{
+        for (int i = 0; ext[i]; i++)
+        {
+            ext[i] = tolower(ext[i]);
+        }
+        sprintf(nameFolder, "%s", ext);
+    }
+    mkdir(nameFolder, 0777);
+    
+    char directDest[200];
+    sprintf(directDest, "%s/%s/%s", currDirect, nameFolder, noPathFolderName(fileOriginal));
+
+    newFilePath(fileOriginal, directDest);
+    return NULL;
+}
+```
+Lalu, untuk soal ini digunakan case berikut
+```
+if (noPathName[0] == '.'){
+        sprintf(nameFolder, "Hidden");
+    }
+    else if (ext == NULL){
+        sprintf(nameFolder, "Unknown");
+    }
+    else{
+        for (int i = 0; ext[i]; i++)
+        {
+            ext[i] = tolower(ext[i]);
+        }
+        sprintf(nameFolder, "%s", ext);
+    }
+    mkdir(nameFolder, 0777);
+```
+Dicase tersebut kita akan melakukan pengecekan pada file apakah file tersebut termasuk file hidden, unknown, atau file yang mempunyai ekstensi. Untuk file hidden pada string awal akan terdapat "." dan jika extension NULL maka masuk kedalam unknown. hal tersebut kami gunakan pertama untuk membuat folder kategorinya. Lalu seperti pada file yang memiliki extension, file-file tersebut akan dipindahkan ke folder kategorinya masing-masing menggunakan fungsi *newFilePath* ``newFilePath(fileOriginal, directDest);`` yang fungsi nya sebagai berikut
+```
+void newFilePath(char source[], char dest[])
+{
+    int ch;
+    FILE *filePath1, *filePath2;
+
+    filePath1 = fopen(source, "r");
+    filePath2 = fopen(dest, "w");
+
+    if (!filePath1){
+        printf("Unable to open source file to read!!\n");
+        fclose(filePath2);
+        return;
+    }
+
+    if (!filePath2){
+        printf("Unable to open target file to write\n");
+        return;
+    }
+
+    while ((ch = fgetc(filePath1)) != EOF){
+        fputc(ch, filePath2);
+    }
+    fclose(filePath1);
+    fclose(filePath2);
+
+    remove(source);
+    return;
+}
+```
+Fungsi ini digunakan untuk memindahkan semua file ke foldernya masing-masing agar mengertahui file harus kemana. Hasil sebagai berikut
+
+
+## 3E
+Pada soal ini diminta agar setiap file yang dikategorikan dioperasikan oleh 1 thread agar jalan secara paralel. Program sudah menerapkan 1 Thread untuk tiap pengkategorian file karena file dipindahkan secara satu per satu.
