@@ -16,7 +16,7 @@ typedef struct data {
 	int x,y;
 }data;
 
-void inputMatrix(){
+void MatriksInput(){
     printf("Input matriks 4x6 :\n");
 	for (int i = 0; i < 4; i++) {
     	for (int j = 0; j < 6; j++) {
@@ -44,27 +44,18 @@ void *operasi_soal(void* arg)
 {
 	data* d = (data*) arg;
 	int a = d->matriksA;
-	//printf("a :%d\n",a);
+	
 	int b = d->matriksB;
-	//printf("b :%d\n",b);
 	int x = d->x;
-	//printf("x :%d\n",x);
 	int y = d->y;
-	//printf("y :%d\n",y);
-
+	
 	if(a==0 || b==0){
-		matriksfaktorial[x][y] = 0;
-		//printf("hasil if 3: %llu\n",matriksfaktorial[x][y]);
-	}
+		matriksfaktorial[x][y] = 0;}
 	else if (a>=b){
 		int temp = a-b;
-		matriksfaktorial[x][y] = factorial(a)/factorial(temp);
-		//printf("hasil if 1: %llu\n",matriksfaktorial[x][y]);
-	}
+		matriksfaktorial[x][y] = factorial(a)/factorial(temp);}
 	else if(b>a){
-		matriksfaktorial[x][y] = factorial(a);
-		//printf("hasil if 2: %llu\n",matriksfaktorial[x][y]);
-	}
+		matriksfaktorial[x][y] = factorial(a);}
 }
 
 
@@ -81,7 +72,7 @@ void main(){
 
 	pthread_t tid[i][j];
         
-inputMatrix();
+MatriksInput();
 	
 
 printf("\nHasil perkalian Matrix di soal A : \n");
