@@ -79,3 +79,78 @@ Pada fungsi ini akan dilakukan pemeriksaan terhadap file dengan mengambil nama e
 ![image](https://user-images.githubusercontent.com/55140514/119259898-8c993100-bbfa-11eb-97dd-693bd8c3c0b3.png)
 
 ## 3B
+Pada soal ini dimintakan untuk melakukan operasi pengkategorian pada suatu directory. Operasi ini hanya dilakukan pada satu directory saja tiap perjalanan program tidak seperti pada soal 3A. Untuk melakukan ini program diminta untuk bisa menerima perintah ``-d``. Setelah menerima dan menjalankan perintah output program akan menyimpan folder-folder yang terbentuk pada working directory program C kita dan menuliskan kata-kata seperti berikut
+```
+Berhasil = print “Direktori sukses disimpan!”
+Gagal = print “Yah, gagal disimpan :(“
+```
+Langkah pertama adalah untuk program menerima perintah atau argumen ``-d`` seperti berikut
+```
+ else if (strcmp(argv[1], "-d") == 0){
+        listFiles(argv[2]);
+        if (errCheck == 0){
+            printf("Direktori sukses disimpan!\n");
+        }
+        else{
+            printf("Yah, gagal disimpan:(\n");
+        }
+    }
+```
+Lalu, sesuai persyaratan soal, kita buat fungsi untuk melakukan pemeriksaan secara recursive pada funsgi *listFiles* seperti berikut
+```
+void listFiles(char *oriPath)
+{
+    char path[1000], pathThread[1000];
+    struct dirent **namelist;
+    int i = 0;
+    int n = scandir(oriPath, &namelist, NULL, alphasort);;
+    if (n < 0)
+        return;
+    else
+    {
+        while (i < n)
+        {
+            if (strcmp(namelist[i]->d_name, ".") != 0 && strcmp(namelist[i]->d_name, "..") != 0)
+            {
+                strcpy(path, oriPath);
+                strcat(path, "/");
+                strcat(path, namelist[i]->d_name);
+
+                strcat(pathThread, "/");
+                strcat(pathThread, namelist[i]->d_name);
+
+                if (namelist[i]->d_type != DT_DIR)
+                {
+                    int err;
+                    err = pthread_create(&(threads[threadCount - 2]), NULL, &moveFile, (void *)path);
+
+                    if (err != 0){
+                        errCheck++;
+                        printf("File %d: Sad, gagal :(\n", threadCount - 1);
+                    }
+                    else
+                        printf("File %d : Berhasil Dikategorikan\n", threadCount - 1);
+                        threadCount++;
+
+                    for (int p = 0; p < (threadCount - 1); p++){
+                        pthread_join(threads[p], NULL);
+                    }
+                }
+                listFiles(path);
+            }
+            free(namelist[i]);
+            ++i;
+        }
+        free(namelist);
+    }
+}
+```
+Fungsi ini bekerja dengan melakukan pengecekan apakah file yang sedang di periksa benar-benar ada dengan melakukan ``strcmp`` pada list file untuk memeriksa apakah ada "." atau ".." karena jika ada maka menandakan bahwa bukan file. Lalu, akan dilakukann pemindahan file  file yang terdapat thread pada `` err = pthread_create(&(threads[threadCount - 2]), NULL, &moveFile, (void *)path);``. Setelah itu baru akan masuk ke fungsi *moveFile* seperti Soal 3A.
+
+Hasil seperti berikut:
+![image](https://user-images.githubusercontent.com/55140514/119260535-67f28880-bbfd-11eb-9064-288270566b79.png)
+![image](https://user-images.githubusercontent.com/55140514/119260542-7476e100-bbfd-11eb-893d-3e01b157c4cb.png)
+
+## 3C
+
+
