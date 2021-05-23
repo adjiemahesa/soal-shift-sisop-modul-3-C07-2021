@@ -13,7 +13,7 @@ int matriksA[4][3] ;
 int matriksB[3][6];
 int hasil[4][6];
 
-void inputMatrix(){
+void MatrixInput(){
 int i = 0;
 int j = 0;
 
