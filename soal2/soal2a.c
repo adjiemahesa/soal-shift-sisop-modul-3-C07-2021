@@ -69,7 +69,8 @@ int main(){
   int (*matriks)[j];
   int a=0;
   pthread_t t[4];
-  inputMatrix();
+  
+MatrixInput();
 
   for(int a=0; a<4; a++){
     pthread_create(&t[a], NULL, &multiplymatrices, NULL);
